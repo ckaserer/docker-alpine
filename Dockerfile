@@ -1,3 +1,2 @@
-FROM arm32v6/alpine:3.6
-MAINTAINER Clemens Kaserer <clemens.kaserer@gmail.com>
+FROM arm32v6/alpine:latest
 COPY tmp/qemu-arm-static /usr/bin/qemu-arm-static
