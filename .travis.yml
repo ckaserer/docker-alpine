@@ -34,3 +34,6 @@ script:
     echo "${DOCKER_PASS}" | docker login -u "${DOCKER_USER}" --password-stdin
     docker push ckaserer/alpine
   fi
+
+after_script:
+  - "curl -X POST https://hooks.microbadger.com/images/ckaserer/alpine/-QVKg7-ij2ceJ1jpMA7Zs-Z9Mig="
