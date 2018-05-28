@@ -7,9 +7,9 @@ services:
 - docker
 
 env:
-  - QEMU_VERSION="2.6.0" ALPINE_VERSION='latest'
-  - QEMU_VERSION="2.6.0" ALPINE_VERSION='3.7'
-  - QEMU_VERSION="2.6.0" ALPINE_VERSION='3.6'
+- QEMU_VERSION='2.6.0' REPO='alpine' TAG='latest' 
+- QEMU_VERSION='2.6.0' REPO='alpine' TAG='3.7'
+- QEMU_VERSION='2.6.0' REPO='alpine' TAG='3.6' 
 
 script:
 # prepare qemu
@@ -23,17 +23,17 @@ script:
   tar xzf qemu-arm-static.tar.gz &&
   popd
 # Replace alpine version with travis env variable
-- sed -i "s/latest/${ALPINE_VERSION}/g" Dockerfile
+- sed -i "s/latest/${TAG}/g" Dockerfile
 # build image
-- docker build -t ckaserer/alpine:${ALPINE_VERSION} .
+- docker build -t ${DOCKER_USER}/${REPO}:${TAG} .
 # test image
-- docker run ckaserer/alpine:${ALPINE_VERSION} uname -a
+- docker run ${DOCKER_USER}/${REPO}:${TAG} uname -a
 # push image
 - >
   if [ "$TRAVIS_BRANCH" == "master" ]; then
     echo "${DOCKER_PASS}" | docker login -u "${DOCKER_USER}" --password-stdin
-    docker push ckaserer/alpine
+    docker push ${DOCKER_USER}/${REPO}
   fi
 
 after_script:
-  - "curl -X POST https://hooks.microbadger.com/images/ckaserer/alpine/-QVKg7-ij2ceJ1jpMA7Zs-Z9Mig="
+- "curl -X POST https://hooks.microbadger.com/images/${DOCKER_USER}/${REPO}/-QVKg7-ij2ceJ1jpMA7Zs-Z9Mig="
